@@ -36,5 +36,28 @@
 ; Try Reduction first (cheap, no search), then fall back to Extension.
 (= (prove-lit $l $path $depth)
 (case (reduction $l $path) ( (True True) (False (try-extension $l $path $depth)) )))
+    ;
+(= (try-lits $l () $full $path $depth) False)
+(= (try-lits $l $remaining $full $path $depth)
+(let* (($lp (car-atom $remaining)) ($rest (cdr-atom $remaining)))
+(let $nl (negate $l)
+(let $unif-result (unify $nl $lp (Pair $lp $full) FAIL)
+    (case $unif-result
+    ( (FAIL (try-lits $l $rest $full $path $depth))
+    ((Pair $slp $sfull)
+    (prove-goals (remove-one $slp $sfull) (cons-atom $l $path) (- $depth 1))) ))))))
+    ; Remove exactly one occurrence (the literal used for the connection)
+        ; from a clause tuple, preserving the rest.
+    (= (remove-one $x $tuple) (remove-one-h $x () $tuple))
+    (= (remove-one-h $x $acc ()) $acc)
+    (= (remove-one-h $x $acc $tuple)
+    (let* (($h (car-atom $tuple)) ($t (cdr-atom $tuple)))
+    (if (== $h $x)
+    (concat-tuple $acc $t)
+    (remove-one-h $x (concat-tuple $acc ($h)) $t))))
+    (= (concat-tuple () $b) $b)
+    (= (concat-tuple $a $b)
+    (let* (($h (car-atom $a)) ($t (cdr-atom $a)) ($rec (concat-tuple $t $b)))
+    (cons-atom $h $rec)))
 
 
