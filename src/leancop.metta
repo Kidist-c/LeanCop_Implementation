@@ -37,6 +37,9 @@
 (= (prove-lit $l $path $depth)
 (case (reduction $l $path) ( (True True) (False (try-extension $l $path $depth)) )))
     ;
+(= (try-one-clause $l $c $path $depth)
+(try-lits $l $c $c $path $depth))
+    ;;;
 (= (try-lits $l () $full $path $depth) False)
 (= (try-lits $l $remaining $full $path $depth)
 (let* (($lp (car-atom $remaining)) ($rest (cdr-atom $remaining)))
@@ -59,5 +62,28 @@
     (= (concat-tuple $a $b)
     (let* (($h (car-atom $a)) ($t (cdr-atom $a)) ($rec (concat-tuple $t $b)))
     (cons-atom $h $rec)))
+
+    
+    ; Attempt to close a start clause (a tuple of literals) at exactly one
+        ; depth bound.
+    (= (prove-start $c $depth) (prove-goals $c () $depth))
+
+        ; Use Non determnistic
+    (= (any-true ()) False)
+    (= (any-true $tuple)
+    (let* (($h (car-atom $tuple)) ($t (cdr-atom $tuple)))
+    (if (== $h True) True (any-true $t))))
+
+    (= (proved? $start-clause $max-depth)
+    (any-true (collapse (prove-iter $start-clause $max-depth))))
+        ; ; Iterative deepening: try depth 1, 2, 3, ... up to $max
+    (= (prove-start-clean $c $d) (any-true (collapse (prove-start $c $d))))
+    (= (prove-iter $c $max) (prove-iter-h $c 1 $max))
+    (= (prove-iter-h $c $d $max)
+    (if (> $d $max) False
+    (case (prove-start-clean $c $d)
+    ( (True True)
+    (False (prove-iter-h $c (+ $d 1) $max)) ))))
+
 
 
