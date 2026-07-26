@@ -23,4 +23,34 @@
     ($lit               $lit))))
 
 
-    
+        ; Skolemization ----
+    ; Replaces Universals ($\forall$): Strips (All $x ...) and replaces the variable $x with a fresh Skolem symbol (Skolem $ctr $freev).
+    ; Keeps Existentials ($\exists$): Strips (Ex $x ...) but
+        ; keeps $x as a free variable for unification, adding it to $freev so future inner Skolem symbols depend on it.
+        ;Threads a Counter: Passes an integer $ctr through And/Or branches to ensure every generated Skolem symbol gets a unique ID.
+
+    (= (pfst (Pair $a $b)) $a)
+    (= (psnd (Pair $a $b)) $b)
+
+    (= (skolemize $f $freev $ctr)
+        (case $f (
+        ((All $x $g)
+        (let $sk (Skolem $ctr $freev)
+        (skolemize (let $x $sk $g) $freev (+ $ctr 1))))
+        ((Ex $x $g)
+        (skolemize $g (cons-atom $x $freev) $ctr))
+        ((And $a $b)
+        (let* (($ra (skolemize $a $freev $ctr))
+        ($a1 (pfst $ra)) ($ctr1 (psnd $ra))
+        ($rb (skolemize $b $freev $ctr1))
+        ($b1 (pfst $rb)) ($ctr2 (psnd $rb)))
+        (Pair (And $a1 $b1) $ctr2)))
+        ((Or $a $b)
+        (let* (($ra (skolemize $a $freev $ctr))
+        ($a1 (pfst $ra)) ($ctr1 (psnd $ra))
+        ($rb (skolemize $b $freev $ctr1))
+        ($b1 (pfst $rb)) ($ctr2 (psnd $rb)))
+        (Pair (Or $a1 $b1) $ctr2)))
+        ($lit (Pair $lit $ctr)))))
+            : test
+        ;!(skolemize (All $x (Ex $y (P $x $y))) () 0)
