@@ -1,5 +1,31 @@
-;; -- LIST UTILITIES --
-;; Alias for member2 to maintain backward compatibility
+
+;; MAKE-MATRIX PREPROCESSOR
+
+;; Usage:   (make-matrix $fml $settings)
+    ;;
+    ;;   $fml      : A First-Order Logic formula in MeTTa AST representation
+;;               e.g., (Ex $y (All $x (Impl (pos (p $y)) (pos (p $x)))))
+;;   $settings : Configuration flags (e.g., 'def' for Tseitin, 'nodef' for pure NNF)
+;;   Returns   : A matrix (list of disjunctive clauses) in definitional clausal form
+    ;;
+    ;; Example:
+;;   !(make-matrix (Ex $y (All $x (Impl (pos (p $y)) (pos (p $x))))) def)
+    ;;
+    ;; Output Matrix:
+;;   (Cons (Cons (Not (pos (p $x1))) Nil)
+;;         (Cons (Cons (pos (p (Skolem 1 (Cons $x1 Nil)))) Nil) Nil))
+    ;;
+    ;;   Equivalent Clause Set:
+;;     Clause 1: [ ~(p(X1)) ]
+;;     Clause 2: [  p(Skolem(1, [X1])) ]
+
+
+
+
+
+
+    ;; -- LIST UTILITIES --
+    ;; Alias for member2 to maintain backward compatibility
 (= (has-option $x Nil) False)
 (= (has-option $x (Cons $h $t))
 (if (== $x $h) True (has-option $x $t)))
@@ -67,10 +93,9 @@
             (((Or $a $b) True)
             ($_ False))))
 
-                ;; -----------------------------------------------------------------------------
-                ;; 2. SUBSTITUTION ENGINE
-                ;; -----------------------------------------------------------------------------
-
+                ;;  SUBSTITUTION ENGINE
+          
+                ;;;; Substitutes $x with $y inside $term, respecting quantifier scoping
             (= (subst $x $y $term)
             (if (== $term $x)
                 $y
@@ -85,7 +110,7 @@
                 ($_           (if (== (get-metatype $term) Expression)
                 (subst-expr $x $y $term)
                 $term))))))
-
+                ;; Traverses and substitutes inside arbitrary expression tuples
             (= (subst-expr $x $y $expr)
             (if (== $expr ())
             ()
@@ -94,19 +119,10 @@
             (let $newT (subst-expr $x $y $t)
             (cons-atom $newH $newT))))))
 
-                ;; -----------------------------------------------------------------------------
-                ;; 3. UNIVAR: VARIABLE RENAMING
-                ;; -----------------------------------------------------------------------------
-
-                ;; fresh-var: generates a genuinely fresh, bare MeTTa variable on each call.
-                ;; This relies on MeTTa's standard hygiene: a pattern variable that appears
-            ;; only on the right-hand side of an equation (not the left) gets a fresh
-                ;; identity on every application. Previously univar wrapped renamed variables
-            ;; as (v $x) -- a compound term, NOT a bare variable -- which meant later
-            ;; unification (e.g. matching (human (v $x)) against a ground fact like
-            ;; (human socrates)) could never succeed, since a bare symbol like `socrates`
-            ;; cannot structurally unify with the compound (v $x). Using a genuine bare
-                ;; fresh variable here restores real first-order unification during proof search.
+                
+                ;; . UNIVAR: VARIABLE RENAMING:-
+                ;; To avoid  variables clashing
+          
             (= (fresh-var) $newvar)
 
             (= (univar $expr $q)
@@ -127,10 +143,9 @@
                 ((Not $a)     (Not (univar $a $q)))
                 ($_           $expr))))
 
-                    ;; -----------------------------------------------------------------------------
-                ;; 4. DEFINITIONAL NNF & SKOLEMIZATION ENGINE (def-8)
-                    ;; -----------------------------------------------------------------------------
-
+                    
+                ;;  DEFINITIONAL NNF & SKOLEMIZATION ENGINE (def-8)
+                    
                 (= (def-nnf $fml $i $set)
                 (let (DefResult $nnf $defL $nextI) (def-8 $fml Nil $i $set)
                 (def-3 $defL $nnf)))
@@ -155,16 +170,19 @@
                     (def-8 (And (Impl $a $b) (Impl $b $a)) $freeV $i $set)
                     (def-8 (Or (And $a $b) (And (Not $a) (Not $b))) $freeV $i $set)))
                     ((Ex $x $f) (def-8 $f (Cons $x $freeV) $i $set))
+
                     ((All $x $fml)
                     (let $skolemTerm (Skolem $i $freeV)
                     (let $fml1 (subst $x $skolemTerm $fml)
                     (def-8 $fml1 $freeV (+ $i 1) $set))))
+
                     ((Or $a $b)
                     (let (DefResult $nnf1 $def1 $i2 $paths1) (def-8-path $a $freeV $i $set)
                     (let (DefResult $nnf2 $def2 $i1 $paths2) (def-8-path $b $freeV $i2 $set)
                     (let $defs (append-list $def1 $def2)
                     (let $nnf (if (> $paths1 $paths2) (Or $nnf2 $nnf1) (Or $nnf1 $nnf2))
                     (DefResult $nnf $defs $i1))))))
+                    
                     ((And $a $b)
                     (let (DefResult $nnfA $defA $i2 $p1) (def-8-path $a $freeV $i $set)
                     (let (TseitinResult $nnf1 $def1 $i3)
@@ -191,10 +209,9 @@
                         ((And $a $b) (+ (count-paths $a) (count-paths $b)))
                         ($_ 1))))
 
-                            ;; -----------------------------------------------------------------------------
-                            ;; 5. DNF TRANSFORMER
-                            ;; -----------------------------------------------------------------------------
-
+                            
+                            ;;  DNF TRANSFORMER
+                            
                         (= (dnf $expr)
                             (case $expr
                             (((And (Or $a $b) $c) (Or (dnf (And $a $c)) (dnf (And $b $c))))
@@ -208,9 +225,9 @@
                             ((Or $a $b) (Or (dnf $a) (dnf $b)))
                             ($_         $expr))))
 
-                                ;; -----------------------------------------------------------------------------
-                            ;; 6. MATRIX BUILDER & TAUTOLOGY DELETER (FIXED union2)
-                                ;; -----------------------------------------------------------------------------
+                                
+                            ;;  MATRIX BUILDER & TAUTOLOGY DELETER (FIXED union2)
+                              
 
                             (= (mat $expr)
                                 (case $expr
@@ -235,10 +252,9 @@
                                     (((Not $p) (member2 $p $list))
                                     ($_       (member2 (Not $expr) $list)))))
 
-                                        ;; -----------------------------------------------------------------------------
-                                        ;; 7. REORDERING & MASTER COORDINATOR
-                                        ;; -----------------------------------------------------------------------------
-
+                                        
+                                        ;; REORDERING & MASTER COORDINATOR
+                                        
                                     (= (mreorder $m $i)
                                     (if (<= $i 0)
                                         $m
@@ -273,6 +289,7 @@
                                     (let $f2 (if (bool-and (has-option conj $set) (is-impl $f1))
                                     (mark-conj $f1)
                                     $f1)
+
                                 (let $dnf-fml (build-dnf $f2 $set)
                                 (let $m (mat $dnf-fml)
                                 (let $reoDepth (get-reo-depth $set)
@@ -280,15 +297,4 @@
                                 (mreorder $m $reoDepth)
                                 $m)))))))
 
-                                ;; -----------------------------------------------------------------------------
-                                ;; 8. TEST RUNNER
-                                ;; -----------------------------------------------------------------------------
-
-                            !(println! "=== SOCRATES SYLLOGISM TEST ===")
-                                !(make-matrix
-                                    (Impl
-                                        (And
-                                        (All $x (Impl (pos (human $x)) (pos (mortal $x))))
-                                        (pos (human socrates)))
-                                        (pos (mortal socrates)))
-                                        Nil)(= (marker-test) 12345)
+                                
