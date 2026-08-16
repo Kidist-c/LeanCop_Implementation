@@ -6,18 +6,14 @@
 ;; Test 1: Pelletier Problem 1 — Propositional Equivalence
 ;; (p → q) ↔ (¬q → ¬p)
 !(test
-  (collapse
-    (prove-matrix-core
-      (And
+   (collapse
+     (prove-matrix-core
+       (And
         (Impl (Impl (pos p) (pos q)) (Impl (Not (pos q)) (Not (pos p))))
-        (Impl (Impl (Not (pos q)) (Not (pos p))) (Impl (pos p) (pos q))))
+         (Impl (Impl (Not (pos q)) (Not (pos p))) (Impl (pos p) (pos q))))
       5))
-  ((ProofSuccess 1 (Cons
-    (ProofBranch
-      (Cons # (Cons (pos q) Nil))
-      (Cons
-        (ProofBranch
-          (Cons (Not (pos q)) (Cons (pos p) Nil))
-          (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) Nil))
-        Nil))
-    Nil))))
+ ((ProofSuccess 1 ((Cons (ProofBranch (Cons # (Cons (pos q) Nil)) (Cons
+ (ProofBranch (Cons (Not (pos q)) (Cons (pos p) Nil)) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) Nil)) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (Def 1 Nil) (Cons (Def 2 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil)  (Cons (ProofBranch (Cons (Not (Def 2 Nil)) Nil) Nil) Nil))) Nil))))
+      )
+
+    

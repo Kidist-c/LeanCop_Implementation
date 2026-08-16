@@ -24,11 +24,22 @@
                 (let (DefResult $nnf $defL $nextI) (def-8 $fml Nil $i $set)
                 (def-3 $defL $nnf)))
 
-                (= (def-3 Nil $fml) $fml)
-                (= (def-3 (Cons (Pair $a (Or $b $c)) $defL) $fml)
-                (def-3 (Cons (Pair $a $b) (Cons (Pair $a $c) $defL)) $fml))
-                (= (def-3 (Cons (Pair $a $b) $defL) $fml)
-                (def-3 $defL (Or $a $fml)))
+                ;; def-3's base case previously only folded $a (the Not-Def
+                ;; marker) into the formula via (Or $a $fml), silently dropping
+                ;; $b -- the definition's actual content. For a Tseitin
+                ;; definition Def_i -> content_i (i.e. Not(Def_i) OR content_i),
+                ;; BOTH disjuncts must survive into the final formula so mat()
+                ;; can turn each into its own clause; otherwise [Not(Def_i)]
+                ;; becomes an unconditional unit clause while content_i --
+                ;; what Def_i was supposed to stand for -- never gets asserted
+                ;; anywhere, which is unsound.
+                (= (def-3 $defL $fml)
+                (case $defL
+                ((Nil $fml)
+                ((Cons (Pair $a (Or $b $c)) $rest)
+                (def-3 (Cons (Pair $a $b) (Cons (Pair $a $c) $rest)) $fml))
+                ((Cons (Pair $a $b) $rest)
+                (def-3 $rest (Or $a (Or $b $fml)))))))
 
                 (= (def-8 $expr $freeV $i $set)
                     (case $expr
@@ -159,16 +170,49 @@
                                     (def-nnf $f2 1 def))))
 
                                     (= (make-matrix $fml $set)
+                                    ;; dedup-clauses removes exact-duplicate clauses from the
+                                    ;; final matrix. Tseitin/definitional clausification (def-3)
+                                    ;; can legitimately produce the same Not(Def_i) marker clause
+                                    ;; once per disjunct of a multi-way-split definition body --
+                                    ;; each copy is logically redundant (an identical clause can
+                                    ;; never offer a connection the first copy didn't already
+                                    ;; offer), so removing exact duplicates is always sound and
+                                    ;; never reduces what's provable; it only prunes redundant
+                                    ;; search branches.
                                     (let $f1 (univar $fml Nil)
                                     (let $f2 (if (bool-and (has-option conj $set) (is-impl $f1))
                                     (mark-conj $f1)
                                     $f1)
 
                                 (let $dnf-fml (build-dnf $f2 $set)
-                                (let $m (mat $dnf-fml)
+                                (let $m0 (mat $dnf-fml)
+                                (let $m (dedup-clauses $m0 Nil)
                                 (let $reoDepth (get-reo-depth $set)
                                 (if (> $reoDepth 0)
                                 (mreorder $m $reoDepth)
-                                $m)))))))
+                                $m))))))))
+
+                                (= (dedup-clauses Nil $seen) Nil)
+                                (= (dedup-clauses (Cons $c $rest) $seen)
+                                (if (any-clause-eq $c $seen)
+                                (dedup-clauses $rest $seen)
+                                (Cons $c (dedup-clauses $rest (Cons $c $seen)))))
+
+                                ;; Two clauses are treated as duplicates if they contain the
+                                ;; same literals regardless of order -- Tseitin/DNF-splitting
+                                ;; from different parts of a formula (e.g. two structurally
+                                ;; mirrored implications) can produce the same logical clause
+                                ;; with its literals in a different order, which plain list
+                                ;; equality would miss.
+                                (= (any-clause-eq $c Nil) False)
+                                (= (any-clause-eq $c (Cons $h $t))
+                                (if (clause-set-eq $c $h) True (any-clause-eq $c $t)))
+
+                                (= (clause-set-eq $a $b)
+                                (bool-and (subset2 $a $b) (subset2 $b $a)))
+
+                                (= (subset2 Nil $b) True)
+                                (= (subset2 (Cons $h $t) $b)
+                                (if (member2 $h $b) (subset2 $t $b) False))
 
                                 
