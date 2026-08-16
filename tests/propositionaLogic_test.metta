@@ -16,42 +16,59 @@
 ;  (ProofBranch (Cons (Not (pos q)) (Cons (pos p) Nil)) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) Nil)) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (Def 1 Nil) (Cons (Def 2 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil)  (Cons (ProofBranch (Cons (Not (Def 2 Nil)) Nil) Nil) Nil))) Nil))))
 ;       )
 ;Test 2: PELLETIER PROBLEM 17 (Propositional Equivalence Benchmark)
-            ; ( (P ∧ (Q → R)) → S )  ↔  ( (¬P ∨ Q ∨ S) ∧ (¬P ∨ ¬R ∨ S) )
-            (= (pelletier-17-lhs)
-            (Impl (And (pos p) (Impl (pos q) (pos r)))
-            (pos s)))
+      ;       ; ( (P ∧ (Q → R)) → S )  ↔  ( (¬P ∨ Q ∨ S) ∧ (¬P ∨ ¬R ∨ S) )
+      ;       (= (pelletier-17-lhs)
+      ;       (Impl (And (pos p) (Impl (pos q) (pos r)))
+      ;       (pos s)))
 
-            (= (pelletier-17-rhs)
-            (And (Or (Not (pos p)) (Or (pos q) (pos s)))
-            (Or (Not (pos p)) (Or (Not (pos r)) (pos s)))))
+      ;       (= (pelletier-17-rhs)
+      ;       (And (Or (Not (pos p)) (Or (pos q) (pos s)))
+      ;       (Or (Not (pos p)) (Or (Not (pos r)) (pos s)))))
 
       
-      !(test (collapse (prove-matrix-core (And (Impl (pelletier-17-lhs)
-       (pelletier-17-rhs)) (Impl (pelletier-17-rhs) (pelletier-17-lhs))) 5))
-       ((ProofSuccess 1 ((Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons 
-       (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) 
-       (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch 
-       (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons 
-       (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) Nil) Nil) Nil))) Nil)) Nil))) Nil)) Nil)
-        (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil))
-         Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) 
-         (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) Nil) Nil) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) (Cons (ProofBranch
-          (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch 
-         (Cons (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons
-          (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons 
-          (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) Nil) Nil) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil)))
-          (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch 
-          (Cons (Not (pos r)) Nil) Nil) Nil))) Nil)) Nil) (Cons (ProofBranch
-           (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) Nil) Nil) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) 
-          (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch 
-          (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons 
-          (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons (pos p) 
-          (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) Nil) Nil) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons
-           (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p))
-           Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Def 1 Nil) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q))
-            (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) Nil) Nil) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos r) Nil)) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos r) Nil)) (Cons (ProofBranch (Cons
-             (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) Nil) Nil) Nil)) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos r) Nil)) (Cons (ProofBranch (Cons (Not (pos r)) Nil) Nil) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (Def 2 Nil) (Cons (Def 3 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 2 Nil)) Nil) Nil) (Cons (ProofBranch (Cons (Not (Def 3 Nil)) Nil) Nil) Nil))) Nil) (Cons (ProofBranch (Cons # (Cons (Def 4 Nil) (Cons (Def 5 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 4 Nil)) Nil) Nil) 
-       (Cons (ProofBranch (Cons (Not (Def 5 Nil)) Nil) Nil) Nil))) Nil))))
-)
+      ; !(test (collapse (prove-matrix-core (And (Impl (pelletier-17-lhs)
+      ;  (pelletier-17-rhs)) (Impl (pelletier-17-rhs) (pelletier-17-lhs))) 5))
+      ;  ((ProofSuccess 1 ((Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons 
+      ;  (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) 
+      ;  (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch 
+      ;  (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons 
+      ;  (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) Nil) Nil) Nil))) Nil)) Nil))) Nil)) Nil)
+      ;   (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil))
+      ;    Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) 
+      ;    (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) Nil) Nil) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) (Cons (ProofBranch
+      ;     (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch 
+      ;    (Cons (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons
+      ;     (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons 
+      ;     (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) Nil) Nil) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (pos r) Nil)))
+      ;     (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch 
+      ;     (Cons (Not (pos r)) Nil) Nil) Nil))) Nil)) Nil) (Cons (ProofBranch
+      ;      (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) Nil) Nil) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) 
+      ;     (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch 
+      ;     (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons 
+      ;     (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons (pos p) 
+      ;     (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) Nil) Nil) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons
+      ;      (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p))
+      ;      Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons (Not (pos r)) Nil)) (Cons (ProofBranch (Cons (pos r) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Not (pos q)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos q) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos s) Nil)) (Cons (ProofBranch (Cons (Not (pos s)) (Cons (pos p) (Cons (Def 1 Nil) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q))
+      ;       (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) Nil) Nil) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos r) Nil)) (Cons (ProofBranch (Cons (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) (Cons (pos p) (Cons (Not (pos s)) Nil))) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) (Cons (ProofBranch (Cons (pos s) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil))) Nil)) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos r) Nil)) (Cons (ProofBranch (Cons
+      ;        (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) Nil) Nil) Nil)) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos r) Nil)) (Cons (ProofBranch (Cons (Not (pos r)) Nil) Nil) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (Def 2 Nil) (Cons (Def 3 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 2 Nil)) Nil) Nil) (Cons (ProofBranch (Cons (Not (Def 3 Nil)) Nil) Nil) Nil))) Nil) (Cons (ProofBranch (Cons # (Cons (Def 4 Nil) (Cons (Def 5 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 4 Nil)) Nil) Nil) 
+      ;  (Cons (ProofBranch (Cons (Not (Def 5 Nil)) Nil) Nil) Nil))) Nil))))
+; )
+;; Pelletier Problem 2: Double Negation
 
-    
+  ;; Pelletier Problem 2: Double Negation
+!(test (collapse (prove-matrix-core
+  (And (Impl (Not (Not (pos p))) (pos p))
+       (Impl (pos p) (Not (Not (pos p)))))
+  100))
+  ((ProofSuccess 1 ((Cons (ProofBranch
+    (Cons # (Cons (pos p) Nil))
+    (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) Nil)) Nil)
+    (Cons (ProofBranch
+      (Cons # (Cons (Def 1 Nil) (Cons (Def 2 Nil) Nil)))
+      (Cons (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil)
+            (Cons (ProofBranch (Cons (Not (Def 2 Nil)) Nil) Nil) Nil))) Nil)))))
+  
+  
+  
+      
+   
