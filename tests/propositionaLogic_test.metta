@@ -53,13 +53,13 @@
       ;        (Not (pos r)) (Cons (pos q) Nil)) (Cons (ProofBranch (Cons (Not (pos q)) Nil) Nil) Nil)) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (pos r) Nil)) (Cons (ProofBranch (Cons (Not (pos r)) Nil) Nil) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (Def 2 Nil) (Cons (Def 3 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 2 Nil)) Nil) Nil) (Cons (ProofBranch (Cons (Not (Def 3 Nil)) Nil) Nil) Nil))) Nil) (Cons (ProofBranch (Cons # (Cons (Def 4 Nil) (Cons (Def 5 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 4 Nil)) Nil) Nil) 
       ;  (Cons (ProofBranch (Cons (Not (Def 5 Nil)) Nil) Nil) Nil))) Nil))))
 ; )
-;; test 3:Pelletier Problem 2: Double Negation
+;; Test 3:Pelletier Problem 2: Double Negation
 ;;¬¬P ↔ P
 
 ; !(test (collapse (prove-matrix-core
 ;   (And (Impl (Not (Not (pos p))) (pos p))
 ;        (Impl (pos p) (Not (Not (pos p)))))
-;   100))
+;   5))
 ;   ((ProofSuccess 1 ((Cons (ProofBranch
 ;     (Cons # (Cons (pos p) Nil))
 ;     (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) Nil)) Nil)
@@ -67,7 +67,8 @@
 ;       (Cons # (Cons (Def 1 Nil) (Cons (Def 2 Nil) Nil)))
 ;       (Cons (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil)
 ;             (Cons (ProofBranch (Cons (Not (Def 2 Nil)) Nil) Nil) Nil))) Nil)))))
- ;test 4:;; Pelletier Problem 3(¬(P → Q) → (Q → P))
+ ;Test 4:;; Pelletier Problem 3(¬(P → Q) → (Q → P))
+
 ; !(test
 ;   (collapse
 ;     (prove-matrix-core
@@ -82,6 +83,8 @@
 ;      (Cons (ProofBranch
 ;       (Cons # (Cons (pos q) Nil))
 ;       (Cons (ProofBranch (Cons (Not (pos q)) Nil) Nil) Nil)) Nil)))))
+;; Test 5:pelletier problem 4: ((¬p → q) ↔ (¬q → p))
+
    !(test (collapse 
    (prove-matrix-core
     (And
