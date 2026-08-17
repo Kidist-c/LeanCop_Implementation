@@ -98,48 +98,52 @@
           
                 ;;;; Substitutes $x with $y inside $term, respecting quantifier scoping
             (= (subst $x $y $term)
-            (if (== $term $x)
-                $y
-                (case $term
-                (((All $v $b)  (if (== $v $x) (All $v $b) (All $v (subst $x $y $b))))
-                ((Ex $v $b)   (if (== $v $x) (Ex $v $b) (Ex $v (subst $x $y $b))))
-                ((And $a $b)  (And (subst $x $y $a) (subst $x $y $b)))
-                ((Or $a $b)   (Or (subst $x $y $a) (subst $x $y $b)))
-                ((Impl $a $b) (Impl (subst $x $y $a) (subst $x $y $b)))
-                ((Not $a)     (Not (subst $x $y $a)))
-                ((pos $a)     (pos (subst $x $y $a)))
-                ($_           (if (== (get-metatype $term) Expression)
-                (subst-expr $x $y $term)
-                $term))))))
-                ;; Traverses and substitutes inside arbitrary expression tuples
-            (= (subst-expr $x $y $expr)
-            (if (== $expr ())
-            ()
-            (let ($h $t) (decons-atom $expr)
-            (let $newH (subst $x $y $h)
-            (let $newT (subst-expr $x $y $t)
-            (cons-atom $newH $newT))))))
+(if (== $term $x)
+    $y
+    (if (== (get-metatype $term) Variable)
+        $term
+        (case $term
+        (((All $v $b)  (if (== $v $x) (All $v $b) (All $v (subst $x $y $b))))
+        ((Ex $v $b)   (if (== $v $x) (Ex $v $b) (Ex $v (subst $x $y $b))))
+        ((And $a $b)  (And (subst $x $y $a) (subst $x $y $b)))
+        ((Or $a $b)   (Or (subst $x $y $a) (subst $x $y $b)))
+        ((Impl $a $b) (Impl (subst $x $y $a) (subst $x $y $b)))
+        ((Not $a)     (Not (subst $x $y $a)))
+        ((pos $a)     (pos (subst $x $y $a)))
+        ($_           (if (== (get-metatype $term) Expression)
+        (subst-expr $x $y $term)
+        $term)))))))
 
                 
                 ;; . UNIVAR: VARIABLE RENAMING:-
                 ;; To avoid  variables clashing
           
             (= (fresh-var) $newvar)
+            ;; Replace the old univar entirely:
 
-            (= (univar $expr $q)
-                (case $expr
-                (((All $x $body)
-                (let $q1 (delete2 $q $x)
-                (let $y (fresh-var)
-                (let $new-body (subst $x $y $body)
-                (All $y (univar $new-body (Cons $y $q1)))))))
-                ((Ex $x $body)
-                (let $q1 (delete2 $q $x)
-                (let $y (fresh-var)
-                (let $new-body (subst $x $y $body)
-                (Ex $y (univar $new-body (Cons $y $q1)))))))
-                ((And $a $b)  (And (univar $a $q) (univar $b $q)))
-                ((Or $a $b)   (Or (univar $a $q) (univar $b $q)))
-                ((Impl $a $b) (Impl (univar $a $q) (univar $b $q)))
-                ((Not $a)     (Not (univar $a $q)))
-                ($_           $expr))))
+(= (univar $fml $q) (univar-seq $fml $q))
+(= (univar-seq $expr $q)
+    (if (== (get-metatype $expr) Variable)
+        $expr
+    (case $expr
+    (((All $x $body)
+      (let $q1 (delete2 $q $x)
+      (let $y (fresh-var)
+      (let $new-body (subst $x $y $body)
+      (let $body2 (univar-seq $new-body (Cons $y $q1))
+      (All $y $body2))))))
+    ((Ex $x $body)
+      (let $q1 (delete2 $q $x)
+      (let $y (fresh-var)
+      (let $new-body (subst $x $y $body)
+      (let $body2 (univar-seq $new-body (Cons $y $q1))
+      (Ex $y $body2))))))
+    ((And $a $b) (And (univar-seq $a $q) (univar-seq $b $q)))
+    ((Or $a $b)  (Or (univar-seq $a $q) (univar-seq $b $q)))
+    ((Impl $a $b)(Impl (univar-seq $a $q) (univar-seq $b $q)))
+    ((Not $a)    (Not (univar-seq $a $q)))
+    ($_ $expr)))))
+
+    
+
+            

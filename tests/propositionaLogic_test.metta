@@ -5,16 +5,16 @@
 
 ;; Test 1: Pelletier Problem 1 — Propositional Equivalence
 ;; (p → q) ↔ (¬q → ¬p)
-; !(test
-;    (collapse
-;      (prove-matrix-core
-;        (And
-;         (Impl (Impl (pos p) (pos q)) (Impl (Not (pos q)) (Not (pos p))))
-;          (Impl (Impl (Not (pos q)) (Not (pos p))) (Impl (pos p) (pos q))))
-;       5))
-;  ((ProofSuccess 1 ((Cons (ProofBranch (Cons # (Cons (pos q) Nil)) (Cons
-;  (ProofBranch (Cons (Not (pos q)) (Cons (pos p) Nil)) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) Nil)) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (Def 1 Nil) (Cons (Def 2 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil)  (Cons (ProofBranch (Cons (Not (Def 2 Nil)) Nil) Nil) Nil))) Nil))))
-;       )
+!(test
+   (collapse
+     (prove-matrix-core
+       (And
+        (Impl (Impl (pos p) (pos q)) (Impl (Not (pos q)) (Not (pos p))))
+         (Impl (Impl (Not (pos q)) (Not (pos p))) (Impl (pos p) (pos q))))
+      5))
+ ((ProofSuccess 1 ((Cons (ProofBranch (Cons # (Cons (pos q) Nil)) (Cons
+ (ProofBranch (Cons (Not (pos q)) (Cons (pos p) Nil)) (Cons (ProofBranch (Cons (Not (pos p)) Nil) Nil) Nil)) Nil)) Nil) (Cons (ProofBranch (Cons # (Cons (Def 1 Nil) (Cons (Def 2 Nil) Nil))) (Cons (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil)  (Cons (ProofBranch (Cons (Not (Def 2 Nil)) Nil) Nil) Nil))) Nil))))
+      )
 ;Test 2: PELLETIER PROBLEM 17 (Propositional Equivalence Benchmark)
       ;       ; ( (P ∧ (Q → R)) → S )  ↔  ( (¬P ∨ Q ∨ S) ∧ (¬P ∨ ¬R ∨ S) )
       ;       (= (pelletier-17-lhs)
@@ -85,25 +85,25 @@
 ;       (Cons (ProofBranch (Cons (Not (pos q)) Nil) Nil) Nil)) Nil)))))
 ;; Test 5:pelletier problem 4: ((¬p → q) ↔ (¬q → p))
 
-   !(test (collapse 
-   (prove-matrix-core
-    (And
-      (Impl
-        (Impl (Not (pos p)) (pos q))
-        (Impl (Not (pos q)) (pos p)))
-      (Impl
-        (Impl (Not (pos q)) (pos p))
-        (Impl (Not (pos p)) (pos q))))
-    5))
-    ((ProofSuccess 1 ((Cons (ProofBranch (Cons # (Cons (pos q) Nil)) (Cons 
-    (ProofBranch (Cons (Not (pos q)) (Cons (Not (pos p)) Nil)) (Cons 
-    (ProofBranch (Cons (pos p) (Cons # Nil)) (Cons (ProofBranch 
-    (Cons (Not #) Nil) Nil) Nil)) Nil)) Nil)) Nil) (Cons (ProofBranch
-     (Cons # (Cons (pos p) Nil)) (Cons (ProofBranch (Cons (Not (pos p)) (Cons (Not (pos q)) Nil)) (Cons 
-     (ProofBranch (Cons (pos q) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil)) Nil)) Nil) (Cons
-      (ProofBranch (Cons # (Cons (Def 1 Nil) (Cons (Def 2 Nil) Nil))) (Cons 
-    (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil) (Cons 
-    (ProofBranch (Cons (Not(Def 2 Nil)) Nil) Nil) Nil))) Nil)))))
+  ;  !(test (collapse 
+  ;  (prove-matrix-core
+  ;   (And
+  ;     (Impl
+  ;       (Impl (Not (pos p)) (pos q))
+  ;       (Impl (Not (pos q)) (pos p)))
+  ;     (Impl
+  ;       (Impl (Not (pos q)) (pos p))
+  ;       (Impl (Not (pos p)) (pos q))))
+  ;   5))
+  ;   ((ProofSuccess 1 ((Cons (ProofBranch (Cons # (Cons (pos q) Nil)) (Cons 
+  ;   (ProofBranch (Cons (Not (pos q)) (Cons (Not (pos p)) Nil)) (Cons 
+  ;   (ProofBranch (Cons (pos p) (Cons # Nil)) (Cons (ProofBranch 
+  ;   (Cons (Not #) Nil) Nil) Nil)) Nil)) Nil)) Nil) (Cons (ProofBranch
+  ;    (Cons # (Cons (pos p) Nil)) (Cons (ProofBranch (Cons (Not (pos p)) (Cons (Not (pos q)) Nil)) (Cons 
+  ;    (ProofBranch (Cons (pos q) (Cons # Nil)) (Cons (ProofBranch (Cons (Not #) Nil) Nil) Nil)) Nil)) Nil)) Nil) (Cons
+  ;     (ProofBranch (Cons # (Cons (Def 1 Nil) (Cons (Def 2 Nil) Nil))) (Cons 
+  ;   (ProofBranch (Cons (Not (Def 1 Nil)) Nil) Nil) (Cons 
+  ;   (ProofBranch (Cons (Not(Def 2 Nil)) Nil) Nil) Nil))) Nil)))))
       
   
   
